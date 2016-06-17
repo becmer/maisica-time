@@ -66,10 +66,6 @@ public final class Span<T extends Temporal & Comparable<? super T>> implements S
         return duration.equals(this.duration) ? this : new Span<>(start, duration);
     }
 
-    public Interval<T> toInterval() {
-        return Interval.of(start, computeEnd());
-    }
-
     public long length(final TemporalUnit unit) {
         return unit.between(start, start.plus(duration));
     }
