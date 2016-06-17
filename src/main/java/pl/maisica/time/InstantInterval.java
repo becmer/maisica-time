@@ -27,6 +27,13 @@ public final class InstantInterval extends AbstractInterval<Instant, InstantInte
     public static InstantInterval between(final Instant start, final Instant end) {
         return new InstantInterval(start, end);
     }
+    
+    public static InstantInterval of(final Interval<Instant> interval) {
+        if (interval instanceof InstantInterval) {
+            return (InstantInterval) interval;
+        }
+        return new InstantInterval(interval.getStart(), interval.getEnd());
+    }
 
     private InstantInterval(final Instant start, final Instant end) {
         super(start, end);

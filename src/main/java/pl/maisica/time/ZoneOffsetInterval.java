@@ -27,6 +27,13 @@ public final class ZoneOffsetInterval extends AbstractInterval<ZoneOffset, ZoneO
     public static ZoneOffsetInterval between(final ZoneOffset start, final ZoneOffset end) {
         return new ZoneOffsetInterval(start, end);
     }
+    
+    public static ZoneOffsetInterval of(final Interval<ZoneOffset> interval) {
+        if (interval instanceof ZoneOffsetInterval) {
+            return (ZoneOffsetInterval) interval;
+        }
+        return new ZoneOffsetInterval(interval.getStart(), interval.getEnd());
+    }
 
     public ZoneOffsetInterval(final ZoneOffset start, final ZoneOffset end) {
         super(start, end);

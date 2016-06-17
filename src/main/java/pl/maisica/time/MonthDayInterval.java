@@ -27,6 +27,13 @@ public final class MonthDayInterval extends AbstractInterval<MonthDay, MonthDayI
     public static MonthDayInterval between(final MonthDay start, final MonthDay end) {
         return new MonthDayInterval(start, end);
     }
+    
+    public static MonthDayInterval of(final Interval<MonthDay> interval) {
+        if (interval instanceof MonthDayInterval) {
+            return (MonthDayInterval) interval;
+        }
+        return new MonthDayInterval(interval.getStart(), interval.getEnd());
+    }
 
     public MonthDayInterval(final MonthDay start, final MonthDay end) {
         super(start, end);

@@ -27,6 +27,13 @@ public final class LocalTimeInterval extends AbstractInterval<LocalTime, LocalTi
     public static LocalTimeInterval between(final LocalTime start, final LocalTime end) {
         return new LocalTimeInterval(start, end);
     }
+    
+    public static LocalTimeInterval of(final Interval<LocalTime> interval) {
+        if (interval instanceof LocalTimeInterval) {
+            return (LocalTimeInterval) interval;
+        }
+        return new LocalTimeInterval(interval.getStart(), interval.getEnd());
+    }
 
     private LocalTimeInterval(final LocalTime start, final LocalTime end) {
         super(start, end);

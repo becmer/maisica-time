@@ -27,6 +27,13 @@ public final class DayOfWeekInterval extends AbstractInterval<DayOfWeek, DayOfWe
     public static DayOfWeekInterval between(final DayOfWeek start, final DayOfWeek end) {
         return new DayOfWeekInterval(start, end);
     }
+    
+    public static DayOfWeekInterval of(final Interval<DayOfWeek> interval) {
+        if (interval instanceof DayOfWeekInterval) {
+            return (DayOfWeekInterval) interval;
+        }
+        return new DayOfWeekInterval(interval.getStart(), interval.getEnd());
+    }
 
     public DayOfWeekInterval(final DayOfWeek start, final DayOfWeek end) {
         super(start, end);

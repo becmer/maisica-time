@@ -27,6 +27,13 @@ public final class OffsetDateTimeInterval extends AbstractInterval<OffsetDateTim
     public static OffsetDateTimeInterval between(final OffsetDateTime start, final OffsetDateTime end) {
         return new OffsetDateTimeInterval(start, end);
     }
+    
+    public static OffsetDateTimeInterval of(final Interval<OffsetDateTime> interval) {
+        if (interval instanceof OffsetDateTimeInterval) {
+            return (OffsetDateTimeInterval) interval;
+        }
+        return new OffsetDateTimeInterval(interval.getStart(), interval.getEnd());
+    }
 
     private OffsetDateTimeInterval(final OffsetDateTime start, final OffsetDateTime end) {
         super(start, end);

@@ -27,6 +27,13 @@ public final class MonthInterval extends AbstractInterval<Month, MonthInterval> 
     public static MonthInterval between(final Month start, final Month end) {
         return new MonthInterval(start, end);
     }
+    
+    public static MonthInterval of(final Interval<Month> interval) {
+        if (interval instanceof MonthInterval) {
+            return (MonthInterval) interval;
+        }
+        return new MonthInterval(interval.getStart(), interval.getEnd());
+    }
 
     public MonthInterval(final Month start, final Month end) {
         super(start, end);

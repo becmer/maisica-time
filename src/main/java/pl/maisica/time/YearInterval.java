@@ -27,6 +27,13 @@ public final class YearInterval extends AbstractInterval<Year, YearInterval> imp
     public static YearInterval between(final Year start, final Year end) {
         return new YearInterval(start, end);
     }
+    
+    public static YearInterval of(final Interval<Year> interval) {
+        if (interval instanceof YearInterval) {
+            return (YearInterval) interval;
+        }
+        return new YearInterval(interval.getStart(), interval.getEnd());
+    }
 
     public YearInterval(final Year start, final Year end) {
         super(start, end);

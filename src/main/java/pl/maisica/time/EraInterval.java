@@ -27,6 +27,13 @@ public final class EraInterval extends AbstractInterval<IsoEra, EraInterval> imp
     public static EraInterval between(final IsoEra start, final IsoEra end) {
         return new EraInterval(start, end);
     }
+    
+    public static EraInterval of(final Interval<IsoEra> interval) {
+        if (interval instanceof EraInterval) {
+            return (EraInterval) interval;
+        }
+        return new EraInterval(interval.getStart(), interval.getEnd());
+    }
 
     public EraInterval(final IsoEra start, final IsoEra end) {
         super(start, end);

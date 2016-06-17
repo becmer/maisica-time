@@ -27,6 +27,13 @@ public final class OffsetTimeInterval extends AbstractInterval<OffsetTime, Offse
     public static OffsetTimeInterval between(final OffsetTime start, final OffsetTime end) {
         return new OffsetTimeInterval(start, end);
     }
+    
+    public static OffsetTimeInterval of(final Interval<OffsetTime> interval) {
+        if (interval instanceof OffsetTimeInterval) {
+            return (OffsetTimeInterval) interval;
+        }
+        return new OffsetTimeInterval(interval.getStart(), interval.getEnd());
+    }
 
     private OffsetTimeInterval(final OffsetTime start, final OffsetTime end) {
         super(start, end);

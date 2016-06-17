@@ -27,6 +27,13 @@ public final class YearMonthInterval extends AbstractInterval<YearMonth, YearMon
     public static YearMonthInterval between(final YearMonth start, final YearMonth end) {
         return new YearMonthInterval(start, end);
     }
+    
+    public static YearMonthInterval of(final Interval<YearMonth> interval) {
+        if (interval instanceof YearMonthInterval) {
+            return (YearMonthInterval) interval;
+        }
+        return new YearMonthInterval(interval.getStart(), interval.getEnd());
+    }
 
     public YearMonthInterval(final YearMonth start, final YearMonth end) {
         super(start, end);

@@ -27,6 +27,13 @@ public final class ZonedDateTimeInterval extends AbstractInterval<ZonedDateTime,
     public static ZonedDateTimeInterval between(final ZonedDateTime start, final ZonedDateTime end) {
         return new ZonedDateTimeInterval(start, end);
     }
+    
+    public static ZonedDateTimeInterval of(final Interval<ZonedDateTime> interval) {
+        if (interval instanceof ZonedDateTimeInterval) {
+            return (ZonedDateTimeInterval) interval;
+        }
+        return new ZonedDateTimeInterval(interval.getStart(), interval.getEnd());
+    }
 
     public ZonedDateTimeInterval(final ZonedDateTime start, final ZonedDateTime end) {
         super(start, end);
