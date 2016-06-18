@@ -20,10 +20,6 @@ import java.time.Month;
 import java.time.format.DateTimeParseException;
 import java.util.Objects;
 
-/**
- *
- * @author Kamil Becmer <kamil.becmer at maisica.pl>
- */
 public final class MonthInterval extends AbstractInterval<Month, MonthInterval> implements Serializable {
 
     public static MonthInterval parse(final CharSequence text) {

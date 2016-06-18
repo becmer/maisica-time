@@ -21,10 +21,6 @@ import java.time.format.DateTimeParseException;
 import java.util.Objects;
 import net.maisica.time.interval.YearMonthInterval;
 
-/**
- *
- * @author Kamil Becmer <kamil.becmer at maisica.pl>
- */
 public final class YearMonthSpan extends AbstractSpan<YearMonth, YearMonthSpan> implements TemporalSpan<YearMonth> {
 
     public static YearMonthSpan parse(final CharSequence text) {

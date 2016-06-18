@@ -21,10 +21,6 @@ import java.time.format.DateTimeParseException;
 import java.util.Objects;
 import net.maisica.time.interval.DateTimeInterval;
 
-/**
- *
- * @author Kamil Becmer <kamil.becmer at maisica.pl>
- */
 public final class DateTimeSpan extends AbstractSpan<LocalDateTime, DateTimeSpan> implements TemporalSpan<LocalDateTime> {
 
     public static DateTimeSpan parse(final CharSequence text) {

@@ -22,10 +22,6 @@ import java.time.format.DateTimeParseException;
 import java.util.Objects;
 import net.maisica.time.interval.TimeInterval;
 
-/**
- *
- * @author Kamil Becmer <kamil.becmer at maisica.pl>
- */
 public final class TimeSpan extends AbstractSpan<LocalTime, TimeSpan> implements TemporalSpan<LocalTime>, Serializable {
 
     public static TimeSpan parse(final CharSequence text) {

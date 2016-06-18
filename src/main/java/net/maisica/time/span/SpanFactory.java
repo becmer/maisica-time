@@ -15,10 +15,6 @@
  */
 package net.maisica.time.span;
 
-/**
- *
- * @author Kamil Becmer <kamil.becmer at maisica.pl>
- */
 @FunctionalInterface
 public interface SpanFactory<T extends Comparable<? super T>, D extends Comparable<? super D>, U extends Span<T, D>> {
 

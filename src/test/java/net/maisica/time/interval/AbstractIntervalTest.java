@@ -15,15 +15,9 @@
  */
 package net.maisica.time.interval;
 
-import net.maisica.time.interval.AbstractInterval;
-import net.maisica.time.interval.IntervalFactory;
 import static org.junit.Assert.*;
 import org.junit.Test;
 
-/**
- *
- * @author Kamil Becmer <kamil.becmer at maisica.pl>
- */
 public class AbstractIntervalTest {
     
     private final AbstractInterval interval;

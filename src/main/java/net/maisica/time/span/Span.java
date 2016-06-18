@@ -15,10 +15,6 @@
  */
 package net.maisica.time.span;
 
-/**
- *
- * @author Kamil Becmer <kamil.becmer at maisica.pl>
- */
 public interface Span<T extends Comparable<? super T>, U extends Comparable<? super U>> {
     
     public T getStart();

@@ -30,10 +30,6 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 import net.maisica.time.span.TemporalSpan;
 
-/**
- *
- * @author Kamil Becmer <kamil.becmer at maisica.pl>
- */
 public interface TemporalInterval<T extends Temporal & Comparable<? super T>> extends Interval<T> {
 
     public default Duration toDuration() {

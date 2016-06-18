@@ -20,10 +20,6 @@ import java.time.ZoneOffset;
 import java.time.format.DateTimeParseException;
 import java.util.Objects;
 
-/**
- *
- * @author Kamil Becmer <kamil.becmer at maisica.pl>
- */
 public final class ZoneOffsetInterval extends AbstractInterval<ZoneOffset, ZoneOffsetInterval> implements Serializable {
 
     public static ZoneOffsetInterval parse(final CharSequence text) {

@@ -15,10 +15,6 @@
  */
 package net.maisica.time.interval;
 
-/**
- *
- * @author Kamil Becmer <kamil.becmer at maisica.pl>
- */
 @FunctionalInterface
 public interface IntervalFactory<T extends Comparable<? super T>, U extends Interval<T>> {
     

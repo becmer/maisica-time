@@ -20,10 +20,6 @@ import java.time.MonthDay;
 import java.time.format.DateTimeParseException;
 import java.util.Objects;
 
-/**
- *
- * @author Kamil Becmer <kamil.becmer at maisica.pl>
- */
 public final class MonthDayInterval extends AbstractInterval<MonthDay, MonthDayInterval> implements Serializable {
 
     public static MonthDayInterval parse(final CharSequence text) {

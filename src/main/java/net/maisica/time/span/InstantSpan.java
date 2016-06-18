@@ -21,10 +21,6 @@ import java.time.format.DateTimeParseException;
 import java.util.Objects;
 import net.maisica.time.interval.InstantInterval;
 
-/**
- *
- * @author Kamil Becmer <kamil.becmer at maisica.pl>
- */
 public final class InstantSpan extends AbstractSpan<Instant, InstantSpan> implements TemporalSpan<Instant> {
 
     public static InstantSpan parse(final CharSequence text) {

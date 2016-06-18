@@ -21,10 +21,6 @@ import java.time.format.DateTimeParseException;
 import java.util.Objects;
 import net.maisica.time.interval.ZonedDateTimeInterval;
 
-/**
- *
- * @author Kamil Becmer <kamil.becmer at maisica.pl>
- */
 public final class ZonedDateTimeSpan extends AbstractSpan<ZonedDateTime, ZonedDateTimeSpan> implements TemporalSpan<ZonedDateTime> {
 
     public static ZonedDateTimeSpan parse(final CharSequence text) {

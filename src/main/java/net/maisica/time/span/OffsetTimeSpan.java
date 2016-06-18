@@ -21,10 +21,6 @@ import java.time.format.DateTimeParseException;
 import java.util.Objects;
 import net.maisica.time.interval.OffsetTimeInterval;
 
-/**
- *
- * @author Kamil Becmer <kamil.becmer at maisica.pl>
- */
 public final class OffsetTimeSpan extends AbstractSpan<OffsetTime, OffsetTimeSpan> implements TemporalSpan<OffsetTime> {
 
     public static OffsetTimeSpan parse(final CharSequence text) {

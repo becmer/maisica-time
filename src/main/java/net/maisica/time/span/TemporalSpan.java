@@ -30,10 +30,6 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 import net.maisica.time.interval.TemporalInterval;
 
-/**
- *
- * @author Kamil Becmer <kamil.becmer at maisica.pl>
- */
 public interface TemporalSpan<T extends Temporal & Comparable<? super T>> extends Span<T, Duration> {
 
     @SuppressWarnings("unchecked")

@@ -22,10 +22,6 @@ import java.time.temporal.TemporalUnit;
 import java.util.Objects;
 import java.util.stream.Stream;
 
-/**
- *
- * @author Kamil Becmer <kamil.becmer at maisica.pl>
- */
 public abstract class AbstractSpan<T extends Temporal & Comparable<? super T>, U extends AbstractSpan<T, U>> implements Span<T, Duration>, Serializable {
 
     private final T start;

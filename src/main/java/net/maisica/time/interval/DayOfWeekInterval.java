@@ -20,10 +20,6 @@ import java.time.DayOfWeek;
 import java.time.format.DateTimeParseException;
 import java.util.Objects;
 
-/**
- *
- * @author Kamil Becmer <kamil.becmer at maisica.pl>
- */
 public final class DayOfWeekInterval extends AbstractInterval<DayOfWeek, DayOfWeekInterval> implements Serializable {
 
     public static DayOfWeekInterval parse(final CharSequence text) {

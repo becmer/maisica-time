@@ -18,10 +18,6 @@ package net.maisica.time.interval;
 import java.util.Objects;
 import java.util.stream.Stream;
 
-/**
- *
- * @author Kamil Becmer <kamil.becmer at maisica.pl>
- */
 public abstract class AbstractInterval<T extends Comparable<? super T>, U extends AbstractInterval<T, U>> implements Interval<T> {
 
     private final T start;
