@@ -16,8 +16,8 @@
 package net.maisica.time.interval;
 
 import java.io.Serializable;
-import java.time.Duration;
 import java.time.LocalDate;
+import java.time.Period;
 import java.time.format.DateTimeParseException;
 import java.util.Objects;
 import net.maisica.time.span.DateSpan;
@@ -48,10 +48,10 @@ public final class DateInterval extends AbstractInterval<LocalDate, DateInterval
         return of(interval.getStart(), interval.getEnd());
     }
     
-    public static DateInterval of(final LocalDate start, final Duration duration) {
+    public static DateInterval of(final LocalDate start, final Period period) {
         Objects.requireNonNull(start, "start");
-        Objects.requireNonNull(duration, "duration");
-        return of(start, start.plus(duration));
+        Objects.requireNonNull(period, "period");
+        return of(start, start.plus(period));
     }
 
     public static DateInterval of(final LocalDate start, final LocalDate end) {

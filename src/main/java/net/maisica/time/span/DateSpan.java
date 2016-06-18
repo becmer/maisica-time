@@ -17,6 +17,7 @@ package net.maisica.time.span;
 
 import java.time.Duration;
 import java.time.LocalDate;
+import java.time.Period;
 import java.time.format.DateTimeParseException;
 import java.util.Objects;
 import net.maisica.time.interval.DateInterval;
@@ -67,7 +68,7 @@ public final class DateSpan extends AbstractSpan<LocalDate, DateSpan> implements
 
     @Override
     public DateInterval toInterval() {
-        return DateInterval.of(getStart(), getDuration());
+        return DateInterval.of(getStart(), Period.from(getDuration()));
     }
 
 }
