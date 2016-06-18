@@ -52,7 +52,7 @@ public final class LocalDateInterval extends AbstractInterval<LocalDate, LocalDa
         if (interval instanceof LocalDateInterval) {
             return (LocalDateInterval) interval;
         }
-        return new LocalDateInterval(interval.getStart(), interval.getEnd());
+        return between(interval.getStart(), interval.getEnd());
     }
 
     private LocalDateInterval(final LocalDate start, final LocalDate end) {

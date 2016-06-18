@@ -52,7 +52,7 @@ public final class InstantInterval extends AbstractInterval<Instant, InstantInte
         if (interval instanceof InstantInterval) {
             return (InstantInterval) interval;
         }
-        return new InstantInterval(interval.getStart(), interval.getEnd());
+        return between(interval.getStart(), interval.getEnd());
     }
 
     private InstantInterval(final Instant start, final Instant end) {

@@ -52,7 +52,7 @@ public final class YearInterval extends AbstractInterval<Year, YearInterval> imp
         if (interval instanceof YearInterval) {
             return (YearInterval) interval;
         }
-        return new YearInterval(interval.getStart(), interval.getEnd());
+        return between(interval.getStart(), interval.getEnd());
     }
 
     private YearInterval(final Year start, final Year end) {

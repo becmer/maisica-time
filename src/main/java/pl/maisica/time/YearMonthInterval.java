@@ -52,7 +52,7 @@ public final class YearMonthInterval extends AbstractInterval<YearMonth, YearMon
         if (interval instanceof YearMonthInterval) {
             return (YearMonthInterval) interval;
         }
-        return new YearMonthInterval(interval.getStart(), interval.getEnd());
+        return between(interval.getStart(), interval.getEnd());
     }
 
     private YearMonthInterval(final YearMonth start, final YearMonth end) {

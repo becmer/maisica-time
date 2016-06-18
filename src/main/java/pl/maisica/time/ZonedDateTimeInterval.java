@@ -52,7 +52,7 @@ public final class ZonedDateTimeInterval extends AbstractInterval<ZonedDateTime,
         if (interval instanceof ZonedDateTimeInterval) {
             return (ZonedDateTimeInterval) interval;
         }
-        return new ZonedDateTimeInterval(interval.getStart(), interval.getEnd());
+        return between(interval.getStart(), interval.getEnd());
     }
 
     private ZonedDateTimeInterval(final ZonedDateTime start, final ZonedDateTime end) {

@@ -52,7 +52,7 @@ public final class MonthDayInterval extends AbstractInterval<MonthDay, MonthDayI
         if (interval instanceof MonthDayInterval) {
             return (MonthDayInterval) interval;
         }
-        return new MonthDayInterval(interval.getStart(), interval.getEnd());
+        return between(interval.getStart(), interval.getEnd());
     }
 
     private MonthDayInterval(final MonthDay start, final MonthDay end) {
