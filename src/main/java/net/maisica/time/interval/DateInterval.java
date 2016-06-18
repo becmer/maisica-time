@@ -16,52 +16,65 @@
 package net.maisica.time.interval;
 
 import java.io.Serializable;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.Objects;
+import net.maisica.time.span.DateSpan;
 
 /**
  *
  * @author Kamil Becmer <kamil.becmer at maisica.pl>
  */
-public final class LocalDateInterval extends AbstractInterval<LocalDate, LocalDateInterval> implements TemporalInterval<LocalDate>, Serializable {
-    
-    public static LocalDateInterval parse(final CharSequence text) {
+public final class DateInterval extends AbstractInterval<LocalDate, DateInterval> implements TemporalInterval<LocalDate>, Serializable {
+
+    public static DateInterval parse(final CharSequence text) {
         Objects.requireNonNull(text, "text");
         for (int i = 0; i < text.length(); i++) {
             if (text.charAt(i) == '/') {
                 final LocalDate start = LocalDate.parse(text.subSequence(0, i++).toString());
                 final LocalDate end = LocalDate.parse(text.subSequence(i, text.length()).toString());
-                return between(start, end);
+                return of(start, end);
             }
         }
         throw new DateTimeParseException("Interval cannot be parsed, no forward slash found", text, 0);
     }
 
-    public static LocalDateInterval between(final LocalDate start, final LocalDate end) {
+    public static DateInterval of(final Interval<LocalDate> interval) {
+        Objects.requireNonNull(interval, "interval");
+        if (interval instanceof DateInterval) {
+            return (DateInterval) interval;
+        }
+        return of(interval.getStart(), interval.getEnd());
+    }
+    
+    public static DateInterval of(final LocalDate start, final Duration duration) {
+        Objects.requireNonNull(start, "start");
+        Objects.requireNonNull(duration, "duration");
+        return of(start, start.plus(duration));
+    }
+
+    public static DateInterval of(final LocalDate start, final LocalDate end) {
         Objects.requireNonNull(start, "start");
         Objects.requireNonNull(end, "end");
         if (end.compareTo(start) < 0) {
             throw new IllegalArgumentException("end is before start");
         }
-        return new LocalDateInterval(start, end);
-    }
-    
-    public static LocalDateInterval of(final Interval<LocalDate> interval) {
-        Objects.requireNonNull(interval, "interval");
-        if (interval instanceof LocalDateInterval) {
-            return (LocalDateInterval) interval;
-        }
-        return between(interval.getStart(), interval.getEnd());
+        return new DateInterval(start, end);
     }
 
-    private LocalDateInterval(final LocalDate start, final LocalDate end) {
+    private DateInterval(final LocalDate start, final LocalDate end) {
         super(start, end);
     }
 
     @Override
-    protected IntervalFactory<LocalDate, LocalDateInterval> getFactory() {
-        return LocalDateInterval::new;
+    protected IntervalFactory<LocalDate, DateInterval> getFactory() {
+        return DateInterval::new;
+    }
+
+    @Override
+    public DateSpan toSpan() {
+        return DateSpan.of(getStart(), toDuration());
     }
 
 }

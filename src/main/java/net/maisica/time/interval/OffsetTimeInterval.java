@@ -16,9 +16,11 @@
 package net.maisica.time.interval;
 
 import java.io.Serializable;
+import java.time.Duration;
 import java.time.OffsetTime;
 import java.time.format.DateTimeParseException;
 import java.util.Objects;
+import net.maisica.time.span.OffsetTimeSpan;
 
 /**
  *
@@ -32,27 +34,33 @@ public final class OffsetTimeInterval extends AbstractInterval<OffsetTime, Offse
             if (text.charAt(i) == '/') {
                 final OffsetTime start = OffsetTime.parse(text.subSequence(0, i++).toString());
                 final OffsetTime end = OffsetTime.parse(text.subSequence(i, text.length()).toString());
-                return between(start, end);
+                return of(start, end);
             }
         }
         throw new DateTimeParseException("Interval cannot be parsed, no forward slash found", text, 0);
     }
-    
-    public static OffsetTimeInterval between(final OffsetTime start, final OffsetTime end) {
+
+    public static OffsetTimeInterval of(final Interval<OffsetTime> interval) {
+        Objects.requireNonNull(interval, "interval");
+        if (interval instanceof OffsetTimeInterval) {
+            return (OffsetTimeInterval) interval;
+        }
+        return of(interval.getStart(), interval.getEnd());
+    }
+
+    public static OffsetTimeInterval of(final OffsetTime start, final Duration duration) {
+        Objects.requireNonNull(start, "start");
+        Objects.requireNonNull(duration, "duration");
+        return of(start, start.plus(duration));
+    }
+
+    public static OffsetTimeInterval of(final OffsetTime start, final OffsetTime end) {
         Objects.requireNonNull(start, "start");
         Objects.requireNonNull(end, "end");
         if (end.compareTo(start) < 0) {
             throw new IllegalArgumentException("end is before start");
         }
         return new OffsetTimeInterval(start, end);
-    }
-    
-    public static OffsetTimeInterval of(final Interval<OffsetTime> interval) {
-        Objects.requireNonNull(interval, "interval");
-        if (interval instanceof OffsetTimeInterval) {
-            return (OffsetTimeInterval) interval;
-        }
-        return between(interval.getStart(), interval.getEnd());
     }
 
     private OffsetTimeInterval(final OffsetTime start, final OffsetTime end) {
@@ -62,6 +70,11 @@ public final class OffsetTimeInterval extends AbstractInterval<OffsetTime, Offse
     @Override
     protected IntervalFactory<OffsetTime, OffsetTimeInterval> getFactory() {
         return OffsetTimeInterval::new;
+    }
+
+    @Override
+    public OffsetTimeSpan toSpan() {
+        return OffsetTimeSpan.of(getStart(), toDuration());
     }
 
 }

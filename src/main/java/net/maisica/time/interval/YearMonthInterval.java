@@ -16,43 +16,51 @@
 package net.maisica.time.interval;
 
 import java.io.Serializable;
+import java.time.Duration;
 import java.time.YearMonth;
 import java.time.format.DateTimeParseException;
 import java.util.Objects;
+import net.maisica.time.span.YearMonthSpan;
 
 /**
  *
  * @author Kamil Becmer <kamil.becmer at maisica.pl>
  */
 public final class YearMonthInterval extends AbstractInterval<YearMonth, YearMonthInterval> implements TemporalInterval<YearMonth>, Serializable {
-    
+
     public static YearMonthInterval parse(final CharSequence text) {
         Objects.requireNonNull(text, "text");
         for (int i = 0; i < text.length(); i++) {
             if (text.charAt(i) == '/') {
                 final YearMonth start = YearMonth.parse(text.subSequence(0, i++).toString());
                 final YearMonth end = YearMonth.parse(text.subSequence(i, text.length()).toString());
-                return between(start, end);
+                return of(start, end);
             }
         }
         throw new DateTimeParseException("Interval cannot be parsed, no forward slash found", text, 0);
     }
-    
-    public static YearMonthInterval between(final YearMonth start, final YearMonth end) {
+
+    public static YearMonthInterval of(final Interval<YearMonth> interval) {
+        Objects.requireNonNull(interval, "interval");
+        if (interval instanceof YearMonthInterval) {
+            return (YearMonthInterval) interval;
+        }
+        return of(interval.getStart(), interval.getEnd());
+    }
+
+    public static YearMonthInterval of(final YearMonth start, final Duration duration) {
+        Objects.requireNonNull(start, "start");
+        Objects.requireNonNull(duration, "duration");
+        return of(start, start.plus(duration));
+    }
+
+    public static YearMonthInterval of(final YearMonth start, final YearMonth end) {
         Objects.requireNonNull(start, "start");
         Objects.requireNonNull(end, "end");
         if (end.compareTo(start) < 0) {
             throw new IllegalArgumentException("end is before start");
         }
         return new YearMonthInterval(start, end);
-    }
-    
-    public static YearMonthInterval of(final Interval<YearMonth> interval) {
-        Objects.requireNonNull(interval, "interval");
-        if (interval instanceof YearMonthInterval) {
-            return (YearMonthInterval) interval;
-        }
-        return between(interval.getStart(), interval.getEnd());
     }
 
     private YearMonthInterval(final YearMonth start, final YearMonth end) {
@@ -63,5 +71,10 @@ public final class YearMonthInterval extends AbstractInterval<YearMonth, YearMon
     protected IntervalFactory<YearMonth, YearMonthInterval> getFactory() {
         return YearMonthInterval::new;
     }
-    
+
+    @Override
+    public YearMonthSpan toSpan() {
+        return YearMonthSpan.of(getStart(), toDuration());
+    }
+
 }

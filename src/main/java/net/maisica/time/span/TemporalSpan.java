@@ -4,6 +4,7 @@ import java.time.Duration;
 import java.time.temporal.Temporal;
 import java.time.temporal.TemporalUnit;
 import java.util.stream.Stream;
+import net.maisica.time.interval.TemporalInterval;
 
 public interface TemporalSpan<T extends Temporal & Comparable<? super T>> extends Span<T, Duration> {
 
@@ -32,5 +33,7 @@ public interface TemporalSpan<T extends Temporal & Comparable<? super T>> extend
                 .limit(getDuration().toNanos() / quant.toNanos())
                 .map(t -> (T) t);
     }
+    
+    public TemporalInterval<T> toInterval();
 
 }

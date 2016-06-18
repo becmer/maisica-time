@@ -32,19 +32,10 @@ public final class MonthDayInterval extends AbstractInterval<MonthDay, MonthDayI
             if (text.charAt(i) == '/') {
                 final MonthDay start = MonthDay.parse(text.subSequence(0, i++).toString());
                 final MonthDay end = MonthDay.parse(text.subSequence(i, text.length()).toString());
-                return between(start, end);
+                return of(start, end);
             }
         }
         throw new DateTimeParseException("Interval cannot be parsed, no forward slash found", text, 0);
-    }
-
-    public static MonthDayInterval between(final MonthDay start, final MonthDay end) {
-        Objects.requireNonNull(start, "start");
-        Objects.requireNonNull(end, "end");
-        if (end.compareTo(start) < 0) {
-            throw new IllegalArgumentException("end is before start");
-        }
-        return new MonthDayInterval(start, end);
     }
 
     public static MonthDayInterval of(final Interval<MonthDay> interval) {
@@ -52,7 +43,16 @@ public final class MonthDayInterval extends AbstractInterval<MonthDay, MonthDayI
         if (interval instanceof MonthDayInterval) {
             return (MonthDayInterval) interval;
         }
-        return between(interval.getStart(), interval.getEnd());
+        return of(interval.getStart(), interval.getEnd());
+    }
+
+    public static MonthDayInterval of(final MonthDay start, final MonthDay end) {
+        Objects.requireNonNull(start, "start");
+        Objects.requireNonNull(end, "end");
+        if (end.compareTo(start) < 0) {
+            throw new IllegalArgumentException("end is before start");
+        }
+        return new MonthDayInterval(start, end);
     }
 
     private MonthDayInterval(final MonthDay start, final MonthDay end) {

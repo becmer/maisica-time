@@ -25,7 +25,7 @@ import java.util.Objects;
  * @author Kamil Becmer <kamil.becmer at maisica.pl>
  */
 public final class MonthInterval extends AbstractInterval<Month, MonthInterval> implements Serializable {
-    
+
     public static MonthInterval parse(final CharSequence text) {
         Objects.requireNonNull(text, "text");
         for (int i = 0; i < text.length(); i++) {
@@ -42,27 +42,27 @@ public final class MonthInterval extends AbstractInterval<Month, MonthInterval> 
                 } catch (IllegalArgumentException ex) {
                     throw new DateTimeParseException("Interval cannot be parsed, invalid end descriptor", text, i);
                 }
-                return between(start, end);
+                return of(start, end);
             }
         }
         throw new DateTimeParseException("Interval cannot be parsed, no forward slash found", text, 0);
     }
-    
-    public static MonthInterval between(final Month start, final Month end) {
+
+    public static MonthInterval of(final Interval<Month> interval) {
+        Objects.requireNonNull(interval, "interval");
+        if (interval instanceof MonthInterval) {
+            return (MonthInterval) interval;
+        }
+        return of(interval.getStart(), interval.getEnd());
+    }
+
+    public static MonthInterval of(final Month start, final Month end) {
         Objects.requireNonNull(start, "start");
         Objects.requireNonNull(end, "end");
         if (end.compareTo(start) < 0) {
             throw new IllegalArgumentException("end is before start");
         }
         return new MonthInterval(start, end);
-    }
-    
-    public static MonthInterval of(final Interval<Month> interval) {
-        Objects.requireNonNull(interval, "interval");
-        if (interval instanceof MonthInterval) {
-            return (MonthInterval) interval;
-        }
-        return between(interval.getStart(), interval.getEnd());
     }
 
     private MonthInterval(final Month start, final Month end) {
@@ -78,5 +78,5 @@ public final class MonthInterval extends AbstractInterval<Month, MonthInterval> 
     public String toString() {
         return getStart().name() + '/' + getEnd().name();
     }
-    
+
 }

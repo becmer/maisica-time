@@ -1,0 +1,73 @@
+/*
+ * Copyright 2016 Kamil Becmer <kamil.becmer at maisica.pl>.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package net.maisica.time.span;
+
+import java.time.Duration;
+import java.time.OffsetTime;
+import java.time.format.DateTimeParseException;
+import java.util.Objects;
+import net.maisica.time.interval.OffsetTimeInterval;
+
+/**
+ *
+ * @author Kamil Becmer <kamil.becmer at maisica.pl>
+ */
+public final class OffsetTimeSpan extends AbstractSpan<OffsetTime, OffsetTimeSpan> implements TemporalSpan<OffsetTime> {
+
+    public static OffsetTimeSpan parse(final CharSequence text) {
+        Objects.requireNonNull(text, "text");
+        for (int i = 0; i < text.length(); i++) {
+            if (text.charAt(i) == '/') {
+                final OffsetTime start = OffsetTime.parse(text.subSequence(0, i++).toString());
+                final Duration duration = Duration.parse(text.subSequence(i, text.length()).toString());
+                return of(start, duration);
+            }
+        }
+        throw new DateTimeParseException("Span cannot be parsed, no forward slash found", text, 0);
+    }
+
+    public static OffsetTimeSpan of(final Span<OffsetTime, Duration> span) {
+        Objects.requireNonNull(span, "span");
+        if (span instanceof OffsetTimeSpan) {
+            return (OffsetTimeSpan) span;
+        }
+        return of(span.getStart(), span.getDuration());
+    }
+
+    public static OffsetTimeSpan of(final OffsetTime start, final Duration duration) {
+        Objects.requireNonNull(start, "start");
+        Objects.requireNonNull(duration, "duration");
+        if (duration.isNegative()) {
+            throw new IllegalArgumentException("duration is negative");
+        }
+        return new OffsetTimeSpan(start, duration);
+    }
+
+    private OffsetTimeSpan(final OffsetTime start, final Duration duration) {
+        super(start, duration);
+    }
+
+    @Override
+    protected SpanFactory<OffsetTime, Duration, OffsetTimeSpan> getFactory() {
+        return OffsetTimeSpan::new;
+    }
+
+    @Override
+    public OffsetTimeInterval toInterval() {
+        return OffsetTimeInterval.of(getStart(), getDuration());
+    }
+
+}

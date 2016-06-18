@@ -16,9 +16,11 @@
 package net.maisica.time.interval;
 
 import java.io.Serializable;
+import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeParseException;
 import java.util.Objects;
+import net.maisica.time.span.OffsetDateTimeSpan;
 
 /**
  *
@@ -32,19 +34,10 @@ public final class OffsetDateTimeInterval extends AbstractInterval<OffsetDateTim
             if (text.charAt(i) == '/') {
                 final OffsetDateTime start = OffsetDateTime.parse(text.subSequence(0, i++).toString());
                 final OffsetDateTime end = OffsetDateTime.parse(text.subSequence(i, text.length()).toString());
-                return between(start, end);
+                return of(start, end);
             }
         }
         throw new DateTimeParseException("Interval cannot be parsed, no forward slash found", text, 0);
-    }
-
-    public static OffsetDateTimeInterval between(final OffsetDateTime start, final OffsetDateTime end) {
-        Objects.requireNonNull(start, "start");
-        Objects.requireNonNull(end, "end");
-        if (end.compareTo(start) < 0) {
-            throw new IllegalArgumentException("end is before start");
-        }
-        return new OffsetDateTimeInterval(start, end);
     }
 
     public static OffsetDateTimeInterval of(final Interval<OffsetDateTime> interval) {
@@ -52,7 +45,22 @@ public final class OffsetDateTimeInterval extends AbstractInterval<OffsetDateTim
         if (interval instanceof OffsetDateTimeInterval) {
             return (OffsetDateTimeInterval) interval;
         }
-        return between(interval.getStart(), interval.getEnd());
+        return of(interval.getStart(), interval.getEnd());
+    }
+
+    public static OffsetDateTimeInterval of(final OffsetDateTime start, final Duration duration) {
+        Objects.requireNonNull(start, "start");
+        Objects.requireNonNull(duration, "duration");
+        return of(start, start.plus(duration));
+    }
+
+    public static OffsetDateTimeInterval of(final OffsetDateTime start, final OffsetDateTime end) {
+        Objects.requireNonNull(start, "start");
+        Objects.requireNonNull(end, "end");
+        if (end.compareTo(start) < 0) {
+            throw new IllegalArgumentException("end is before start");
+        }
+        return new OffsetDateTimeInterval(start, end);
     }
 
     private OffsetDateTimeInterval(final OffsetDateTime start, final OffsetDateTime end) {
@@ -62,6 +70,11 @@ public final class OffsetDateTimeInterval extends AbstractInterval<OffsetDateTim
     @Override
     protected IntervalFactory<OffsetDateTime, OffsetDateTimeInterval> getFactory() {
         return OffsetDateTimeInterval::new;
+    }
+
+    @Override
+    public OffsetDateTimeSpan toSpan() {
+        return OffsetDateTimeSpan.of(getStart(), toDuration());
     }
 
 }

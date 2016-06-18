@@ -16,9 +16,11 @@
 package net.maisica.time.interval;
 
 import java.io.Serializable;
+import java.time.Duration;
 import java.time.Year;
 import java.time.format.DateTimeParseException;
 import java.util.Objects;
+import net.maisica.time.span.YearSpan;
 
 /**
  *
@@ -32,19 +34,10 @@ public final class YearInterval extends AbstractInterval<Year, YearInterval> imp
             if (text.charAt(i) == '/') {
                 final Year start = Year.parse(text.subSequence(0, i++).toString());
                 final Year end = Year.parse(text.subSequence(i, text.length()).toString());
-                return between(start, end);
+                return of(start, end);
             }
         }
         throw new DateTimeParseException("Interval cannot be parsed, no forward slash found", text, 0);
-    }
-
-    public static YearInterval between(final Year start, final Year end) {
-        Objects.requireNonNull(start, "start");
-        Objects.requireNonNull(end, "end");
-        if (end.compareTo(start) < 0) {
-            throw new IllegalArgumentException("end is before start");
-        }
-        return new YearInterval(start, end);
     }
 
     public static YearInterval of(final Interval<Year> interval) {
@@ -52,7 +45,22 @@ public final class YearInterval extends AbstractInterval<Year, YearInterval> imp
         if (interval instanceof YearInterval) {
             return (YearInterval) interval;
         }
-        return between(interval.getStart(), interval.getEnd());
+        return of(interval.getStart(), interval.getEnd());
+    }
+
+    public static YearInterval of(final Year start, final Duration duration) {
+        Objects.requireNonNull(start, "start");
+        Objects.requireNonNull(duration, "duration");
+        return of(start, start.plus(duration));
+    }
+
+    public static YearInterval of(final Year start, final Year end) {
+        Objects.requireNonNull(start, "start");
+        Objects.requireNonNull(end, "end");
+        if (end.compareTo(start) < 0) {
+            throw new IllegalArgumentException("end is before start");
+        }
+        return new YearInterval(start, end);
     }
 
     private YearInterval(final Year start, final Year end) {
@@ -62,6 +70,11 @@ public final class YearInterval extends AbstractInterval<Year, YearInterval> imp
     @Override
     protected IntervalFactory<Year, YearInterval> getFactory() {
         return YearInterval::new;
+    }
+
+    @Override
+    public YearSpan toSpan() {
+        return YearSpan.of(getStart(), toDuration());
     }
 
 }

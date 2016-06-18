@@ -42,19 +42,10 @@ public final class DayOfWeekInterval extends AbstractInterval<DayOfWeek, DayOfWe
                 } catch (IllegalArgumentException ex) {
                     throw new DateTimeParseException("Interval cannot be parsed, invalid end descriptor", text, i);
                 }
-                return between(start, end);
+                return of(start, end);
             }
         }
         throw new DateTimeParseException("Interval cannot be parsed, no forward slash found", text, 0);
-    }
-
-    public static DayOfWeekInterval between(final DayOfWeek start, final DayOfWeek end) {
-        Objects.requireNonNull(start, "start");
-        Objects.requireNonNull(end, "end");
-        if (end.compareTo(start) < 0) {
-            throw new IllegalArgumentException("end is before start");
-        }
-        return new DayOfWeekInterval(start, end);
     }
 
     public static DayOfWeekInterval of(final Interval<DayOfWeek> interval) {
@@ -62,7 +53,16 @@ public final class DayOfWeekInterval extends AbstractInterval<DayOfWeek, DayOfWe
         if (interval instanceof DayOfWeekInterval) {
             return (DayOfWeekInterval) interval;
         }
-        return between(interval.getStart(), interval.getEnd());
+        return of(interval.getStart(), interval.getEnd());
+    }
+
+    public static DayOfWeekInterval of(final DayOfWeek start, final DayOfWeek end) {
+        Objects.requireNonNull(start, "start");
+        Objects.requireNonNull(end, "end");
+        if (end.compareTo(start) < 0) {
+            throw new IllegalArgumentException("end is before start");
+        }
+        return new DayOfWeekInterval(start, end);
     }
 
     private DayOfWeekInterval(final DayOfWeek start, final DayOfWeek end) {

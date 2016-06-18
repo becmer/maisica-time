@@ -28,15 +28,6 @@ import java.util.stream.Stream;
  */
 public abstract class AbstractSpan<T extends Temporal & Comparable<? super T>, U extends AbstractSpan<T, U>> implements Span<T, Duration>, Serializable {
 
-//    public static <T extends Temporal & Comparable<? super T>> AbstractSpan<T> of(final T start, final Duration duration) {
-//        Objects.requireNonNull(start, "start");
-//        Objects.requireNonNull(duration, "duration");
-//        if (duration.isNegative()) {
-//            throw new IllegalArgumentException("duration is negative");
-//        }
-//        return new AbstractSpan<>(start, duration);
-//    }
-
     private final T start;
     private final Duration duration;
 
@@ -44,7 +35,7 @@ public abstract class AbstractSpan<T extends Temporal & Comparable<? super T>, U
         this.start = start;
         this.duration = duration;
     }
-    
+
     protected abstract SpanFactory<T, Duration, U> getFactory();
 
     @Override
@@ -125,6 +116,11 @@ public abstract class AbstractSpan<T extends Temporal & Comparable<? super T>, U
             return false;
         }
         return true;
+    }
+
+    @Override
+    public String toString() {
+        return start.toString() + '/' + duration.toString();
     }
 
 }
