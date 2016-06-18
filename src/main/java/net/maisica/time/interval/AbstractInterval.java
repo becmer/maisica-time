@@ -18,6 +18,12 @@ package net.maisica.time.interval;
 import java.util.Objects;
 import java.util.stream.Stream;
 
+/**
+ * Base implementation for specialized intervals.
+ * 
+ * @param <T> the temporal-on-continuum type, must be comparable
+ * @param <U> the final implementation type
+ */
 public abstract class AbstractInterval<T extends Comparable<? super T>, U extends AbstractInterval<T, U>> implements Interval<T> {
 
     private final T start;

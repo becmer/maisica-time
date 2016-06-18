@@ -16,7 +16,7 @@
 package net.maisica.time.interval;
 
 /**
- * An immutable interval between two temporals.
+ * An interface for immutable interval between two temporals.
  * <p>
  * An interval represents the part of the continuum between inclusive start and exclusive end. The end temporal is always greater than or equal to the start
  * temporal.
@@ -26,7 +26,6 @@ package net.maisica.time.interval;
  * </p>
  *
  * @param <T> the temporal-on-continuum type, must be comparable
- * @see TemporalInterval
  * @see net.maisica.time.span.Span
  */
 public interface Interval<T extends Comparable<? super T>> {

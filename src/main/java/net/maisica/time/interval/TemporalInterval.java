@@ -30,14 +30,39 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 import net.maisica.time.span.TemporalSpan;
 
+/**
+ * An interface for intervals based on time continuum, that means the temporal can be directly placed on timeline.
+ *
+ * @param <T> the {@link Temporal} comparable type
+ */
 public interface TemporalInterval<T extends Temporal & Comparable<? super T>> extends Interval<T> {
 
+    /**
+     * Gets the duration of this interval.
+     *
+     * @return the non-negative duration
+     */
     public default Duration toDuration() {
         return Duration.between(getStart(), getEnd());
     }
 
+    /**
+     * Converts this interval to span.
+     *
+     * @return the span with same start and duration
+     */
     public TemporalSpan<T> toSpan();
 
+    /**
+     * Generates stream of temporals with specified step.
+     * <p>
+     * The result stream consist all temporals contained in this interval split by the specified step starting from the start temporal. Returns empty stream if
+     * this interval is empty, otherwise contains the start temporal at least.
+     * </p>
+     *
+     * @param step the positive step, not null
+     * @return stream of temporals
+     */
     @SuppressWarnings("unchecked")
     public default Stream<T> stream(final TemporalAmount step) {
         Objects.requireNonNull(step, "step");
@@ -45,7 +70,7 @@ public interface TemporalInterval<T extends Temporal & Comparable<? super T>> ex
         if (unsupportedUnit != null) {
             throw new UnsupportedTemporalTypeException(String.format("Unsupported unit: %s", unsupportedUnit));
         }
-        
+
         final Spliterator<T> spliterator = Stream.iterate(getStart(), step::addTo).map(t -> (T) t).spliterator();
         return StreamSupport.stream(new Spliterators.AbstractSpliterator<T>(Long.MAX_VALUE, DISTINCT | IMMUTABLE | NONNULL | ORDERED | SORTED) {
 
