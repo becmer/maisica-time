@@ -28,11 +28,8 @@ public abstract class AbstractInterval<T extends Comparable<? super T>, U extend
     private final T end;
 
     public AbstractInterval(final T start, final T end) {
-        this.start = Objects.requireNonNull(start, "start");
-        this.end = Objects.requireNonNull(end, "end");
-        if (end.compareTo(start) < 0) {
-            throw new IllegalArgumentException("end is before start");
-        }
+        this.start = start;
+        this.end = end;
     }
 
     protected abstract IntervalFactory<T, U> getFactory();
@@ -49,11 +46,19 @@ public abstract class AbstractInterval<T extends Comparable<? super T>, U extend
 
     @Override
     public final U withStart(final T start) {
+        Objects.requireNonNull(start, "start");
+        if (end.compareTo(start) < 0) {
+            throw new IllegalArgumentException("end is before start");
+        }
         return getFactory().createInterval(start, end);
     }
 
     @Override
     public final U withEnd(final T end) {
+        Objects.requireNonNull(end, "end");
+        if (end.compareTo(start) < 0) {
+            throw new IllegalArgumentException("end is before start");
+        }
         return getFactory().createInterval(start, end);
     }
 
@@ -64,26 +69,30 @@ public abstract class AbstractInterval<T extends Comparable<? super T>, U extend
 
     @Override
     public final boolean contains(final T o) {
-        return o.compareTo(start) >= 0 && o.compareTo(end) < 0;
+        return o == null ? false : o.compareTo(start) >= 0 && o.compareTo(end) < 0;
     }
 
     @Override
     public final boolean encloses(final Interval<T> interval) {
+        Objects.requireNonNull(interval, "interval");
         return interval.getStart().compareTo(start) >= 0 && interval.getEnd().compareTo(end) <= 0;
     }
 
     @Override
     public final boolean abuts(final Interval<T> interval) {
+        Objects.requireNonNull(interval, "interval");
         return interval.getEnd().equals(start) ^ interval.getStart().equals(end);
     }
 
     @Override
     public final boolean overlaps(final Interval<T> interval) {
+        Objects.requireNonNull(interval, "interval");
         return (interval.getEnd().compareTo(start) > 0 && interval.getStart().compareTo(end) < 0) || equals(interval);
     }
 
     @Override
     public final U overlap(final Interval<T> interval) {
+        Objects.requireNonNull(interval, "interval");
         return !overlaps(interval) ? null : getFactory().createInterval(
                 Stream.of(start, interval.getStart()).max(Comparable::compareTo).get(),
                 Stream.of(end, interval.getEnd()).min(Comparable::compareTo).get());
@@ -91,6 +100,7 @@ public abstract class AbstractInterval<T extends Comparable<? super T>, U extend
 
     @Override
     public final U gap(final Interval<T> interval) {
+        Objects.requireNonNull(interval, "interval");
         final T thatStart = interval.getStart();
         final T thatEnd = interval.getEnd();
         if (thatStart.compareTo(end) > 0) {
@@ -104,6 +114,7 @@ public abstract class AbstractInterval<T extends Comparable<? super T>, U extend
 
     @Override
     public final U join(final Interval<T> interval) {
+        Objects.requireNonNull(interval, "interval");
         return getFactory().createInterval(
                 Stream.of(start, interval.getStart()).min(Comparable::compareTo).get(),
                 Stream.of(end, interval.getEnd()).max(Comparable::compareTo).get());
@@ -136,6 +147,11 @@ public abstract class AbstractInterval<T extends Comparable<? super T>, U extend
             return false;
         }
         return true;
+    }
+
+    @Override
+    public String toString() {
+        return start.toString() + '/' + end.toString();
     }
 
 }

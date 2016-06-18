@@ -17,6 +17,8 @@ package pl.maisica.time;
 
 import java.io.Serializable;
 import java.time.Year;
+import java.time.format.DateTimeParseException;
+import java.util.Objects;
 
 /**
  *
@@ -24,18 +26,36 @@ import java.time.Year;
  */
 public final class YearInterval extends AbstractInterval<Year, YearInterval> implements TemporalInterval<Year>, Serializable {
 
+    public static YearInterval parse(final CharSequence text) {
+        Objects.requireNonNull(text, "text");
+        for (int i = 0; i < text.length(); i++) {
+            if (text.charAt(i) == '/') {
+                final Year start = Year.parse(text.subSequence(0, i++).toString());
+                final Year end = Year.parse(text.subSequence(i, text.length()).toString());
+                return between(start, end);
+            }
+        }
+        throw new DateTimeParseException("Interval cannot be parsed, no forward slash found", text, 0);
+    }
+
     public static YearInterval between(final Year start, final Year end) {
+        Objects.requireNonNull(start, "start");
+        Objects.requireNonNull(end, "end");
+        if (end.compareTo(start) < 0) {
+            throw new IllegalArgumentException("end is before start");
+        }
         return new YearInterval(start, end);
     }
-    
+
     public static YearInterval of(final Interval<Year> interval) {
+        Objects.requireNonNull(interval, "interval");
         if (interval instanceof YearInterval) {
             return (YearInterval) interval;
         }
         return new YearInterval(interval.getStart(), interval.getEnd());
     }
 
-    public YearInterval(final Year start, final Year end) {
+    private YearInterval(final Year start, final Year end) {
         super(start, end);
     }
 

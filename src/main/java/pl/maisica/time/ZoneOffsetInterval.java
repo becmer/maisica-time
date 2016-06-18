@@ -17,6 +17,8 @@ package pl.maisica.time;
 
 import java.io.Serializable;
 import java.time.ZoneOffset;
+import java.time.format.DateTimeParseException;
+import java.util.Objects;
 
 /**
  *
@@ -24,18 +26,36 @@ import java.time.ZoneOffset;
  */
 public final class ZoneOffsetInterval extends AbstractInterval<ZoneOffset, ZoneOffsetInterval> implements Serializable {
     
+    public static ZoneOffsetInterval parse(final CharSequence text) {
+        Objects.requireNonNull(text, "text");
+        for (int i = 0; i < text.length(); i++) {
+            if (text.charAt(i) == '/') {
+                final ZoneOffset start = ZoneOffset.of(text.subSequence(0, i++).toString());
+                final ZoneOffset end = ZoneOffset.of(text.subSequence(i, text.length()).toString());
+                return between(start, end);
+            }
+        }
+        throw new DateTimeParseException("Interval cannot be parsed, no forward slash found", text, 0);
+    }
+    
     public static ZoneOffsetInterval between(final ZoneOffset start, final ZoneOffset end) {
+        Objects.requireNonNull(start, "start");
+        Objects.requireNonNull(end, "end");
+        if (end.compareTo(start) < 0) {
+            throw new IllegalArgumentException("end is before start");
+        }
         return new ZoneOffsetInterval(start, end);
     }
     
     public static ZoneOffsetInterval of(final Interval<ZoneOffset> interval) {
+        Objects.requireNonNull(interval, "interval");
         if (interval instanceof ZoneOffsetInterval) {
             return (ZoneOffsetInterval) interval;
         }
         return new ZoneOffsetInterval(interval.getStart(), interval.getEnd());
     }
 
-    public ZoneOffsetInterval(final ZoneOffset start, final ZoneOffset end) {
+    private ZoneOffsetInterval(final ZoneOffset start, final ZoneOffset end) {
         super(start, end);
     }
 

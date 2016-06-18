@@ -17,25 +17,45 @@ package pl.maisica.time;
 
 import java.io.Serializable;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeParseException;
+import java.util.Objects;
 
 /**
  *
  * @author Kamil Becmer <kamil.becmer at maisica.pl>
  */
 public final class ZonedDateTimeInterval extends AbstractInterval<ZonedDateTime, ZonedDateTimeInterval> implements TemporalInterval<ZonedDateTime>, Serializable {
+    
+    public static ZonedDateTimeInterval parse(final CharSequence text) {
+        Objects.requireNonNull(text, "text");
+        for (int i = 0; i < text.length(); i++) {
+            if (text.charAt(i) == '/') {
+                final ZonedDateTime start = ZonedDateTime.parse(text.subSequence(0, i++).toString());
+                final ZonedDateTime end = ZonedDateTime.parse(text.subSequence(i, text.length()).toString());
+                return between(start, end);
+            }
+        }
+        throw new DateTimeParseException("Interval cannot be parsed, no forward slash found", text, 0);
+    }
 
     public static ZonedDateTimeInterval between(final ZonedDateTime start, final ZonedDateTime end) {
+        Objects.requireNonNull(start, "start");
+        Objects.requireNonNull(end, "end");
+        if (end.compareTo(start) < 0) {
+            throw new IllegalArgumentException("end is before start");
+        }
         return new ZonedDateTimeInterval(start, end);
     }
     
     public static ZonedDateTimeInterval of(final Interval<ZonedDateTime> interval) {
+        Objects.requireNonNull(interval, "interval");
         if (interval instanceof ZonedDateTimeInterval) {
             return (ZonedDateTimeInterval) interval;
         }
         return new ZonedDateTimeInterval(interval.getStart(), interval.getEnd());
     }
 
-    public ZonedDateTimeInterval(final ZonedDateTime start, final ZonedDateTime end) {
+    private ZonedDateTimeInterval(final ZonedDateTime start, final ZonedDateTime end) {
         super(start, end);
     }
 

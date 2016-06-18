@@ -17,6 +17,8 @@ package pl.maisica.time;
 
 import java.io.Serializable;
 import java.time.OffsetTime;
+import java.time.format.DateTimeParseException;
+import java.util.Objects;
 
 /**
  *
@@ -24,11 +26,29 @@ import java.time.OffsetTime;
  */
 public final class OffsetTimeInterval extends AbstractInterval<OffsetTime, OffsetTimeInterval> implements TemporalInterval<OffsetTime>, Serializable {
 
+    public static OffsetTimeInterval parse(final CharSequence text) {
+        Objects.requireNonNull(text, "text");
+        for (int i = 0; i < text.length(); i++) {
+            if (text.charAt(i) == '/') {
+                final OffsetTime start = OffsetTime.parse(text.subSequence(0, i++).toString());
+                final OffsetTime end = OffsetTime.parse(text.subSequence(i, text.length()).toString());
+                return between(start, end);
+            }
+        }
+        throw new DateTimeParseException("Interval cannot be parsed, no forward slash found", text, 0);
+    }
+    
     public static OffsetTimeInterval between(final OffsetTime start, final OffsetTime end) {
+        Objects.requireNonNull(start, "start");
+        Objects.requireNonNull(end, "end");
+        if (end.compareTo(start) < 0) {
+            throw new IllegalArgumentException("end is before start");
+        }
         return new OffsetTimeInterval(start, end);
     }
     
     public static OffsetTimeInterval of(final Interval<OffsetTime> interval) {
+        Objects.requireNonNull(interval, "interval");
         if (interval instanceof OffsetTimeInterval) {
             return (OffsetTimeInterval) interval;
         }

@@ -17,25 +17,45 @@ package pl.maisica.time;
 
 import java.io.Serializable;
 import java.time.MonthDay;
+import java.time.format.DateTimeParseException;
+import java.util.Objects;
 
 /**
  *
  * @author Kamil Becmer <kamil.becmer at maisica.pl>
  */
 public final class MonthDayInterval extends AbstractInterval<MonthDay, MonthDayInterval> implements Serializable {
-    
+
+    public static MonthDayInterval parse(final CharSequence text) {
+        Objects.requireNonNull(text, "text");
+        for (int i = 0; i < text.length(); i++) {
+            if (text.charAt(i) == '/') {
+                final MonthDay start = MonthDay.parse(text.subSequence(0, i++).toString());
+                final MonthDay end = MonthDay.parse(text.subSequence(i, text.length()).toString());
+                return between(start, end);
+            }
+        }
+        throw new DateTimeParseException("Interval cannot be parsed, no forward slash found", text, 0);
+    }
+
     public static MonthDayInterval between(final MonthDay start, final MonthDay end) {
+        Objects.requireNonNull(start, "start");
+        Objects.requireNonNull(end, "end");
+        if (end.compareTo(start) < 0) {
+            throw new IllegalArgumentException("end is before start");
+        }
         return new MonthDayInterval(start, end);
     }
-    
+
     public static MonthDayInterval of(final Interval<MonthDay> interval) {
+        Objects.requireNonNull(interval, "interval");
         if (interval instanceof MonthDayInterval) {
             return (MonthDayInterval) interval;
         }
         return new MonthDayInterval(interval.getStart(), interval.getEnd());
     }
 
-    public MonthDayInterval(final MonthDay start, final MonthDay end) {
+    private MonthDayInterval(final MonthDay start, final MonthDay end) {
         super(start, end);
     }
 
@@ -43,5 +63,5 @@ public final class MonthDayInterval extends AbstractInterval<MonthDay, MonthDayI
     protected IntervalFactory<MonthDay, MonthDayInterval> getFactory() {
         return MonthDayInterval::new;
     }
-    
+
 }

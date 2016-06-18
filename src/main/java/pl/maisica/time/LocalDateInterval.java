@@ -17,18 +17,38 @@ package pl.maisica.time;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
+import java.util.Objects;
 
 /**
  *
  * @author Kamil Becmer <kamil.becmer at maisica.pl>
  */
 public final class LocalDateInterval extends AbstractInterval<LocalDate, LocalDateInterval> implements TemporalInterval<LocalDate>, Serializable {
+    
+    public static LocalDateInterval parse(final CharSequence text) {
+        Objects.requireNonNull(text, "text");
+        for (int i = 0; i < text.length(); i++) {
+            if (text.charAt(i) == '/') {
+                final LocalDate start = LocalDate.parse(text.subSequence(0, i++).toString());
+                final LocalDate end = LocalDate.parse(text.subSequence(i, text.length()).toString());
+                return between(start, end);
+            }
+        }
+        throw new DateTimeParseException("Interval cannot be parsed, no forward slash found", text, 0);
+    }
 
     public static LocalDateInterval between(final LocalDate start, final LocalDate end) {
+        Objects.requireNonNull(start, "start");
+        Objects.requireNonNull(end, "end");
+        if (end.compareTo(start) < 0) {
+            throw new IllegalArgumentException("end is before start");
+        }
         return new LocalDateInterval(start, end);
     }
     
     public static LocalDateInterval of(final Interval<LocalDate> interval) {
+        Objects.requireNonNull(interval, "interval");
         if (interval instanceof LocalDateInterval) {
             return (LocalDateInterval) interval;
         }
