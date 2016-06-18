@@ -16,6 +16,7 @@
 package net.maisica.time.span;
 
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
 import java.util.Objects;
@@ -33,6 +34,11 @@ public final class DateTimeSpan extends AbstractSpan<LocalDateTime, DateTimeSpan
             }
         }
         throw new DateTimeParseException("Span cannot be parsed, no forward slash found", text, 0);
+    }
+    
+    public static DateTimeSpan wholeDay(final LocalDate date) {
+        Objects.requireNonNull(date, "date");
+        return new DateTimeSpan(date.atStartOfDay(), Duration.ofDays(1L));
     }
 
     public static DateTimeSpan of(final Span<LocalDateTime, Duration> span) {

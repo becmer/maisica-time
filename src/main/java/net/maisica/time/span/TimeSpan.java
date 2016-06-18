@@ -23,6 +23,8 @@ import java.util.Objects;
 import net.maisica.time.interval.TimeInterval;
 
 public final class TimeSpan extends AbstractSpan<LocalTime, TimeSpan> implements TemporalSpan<LocalTime>, Serializable {
+    
+    public static final TimeSpan WHOLE_DAY = new TimeSpan(LocalTime.MIDNIGHT, Duration.ofDays(1L));
 
     public static TimeSpan parse(final CharSequence text) {
         Objects.requireNonNull(text, "text");
@@ -34,6 +36,10 @@ public final class TimeSpan extends AbstractSpan<LocalTime, TimeSpan> implements
             }
         }
         throw new DateTimeParseException("Span cannot be parsed, no forward slash found", text, 0);
+    }
+    
+    public static TimeSpan wholeDay() {
+        return WHOLE_DAY;
     }
 
     public static TimeSpan of(final Span<LocalTime, Duration> span) {

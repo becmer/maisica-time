@@ -17,6 +17,7 @@ package net.maisica.time.interval;
 
 import java.io.Serializable;
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Period;
 import java.time.format.DateTimeParseException;
@@ -35,6 +36,12 @@ public final class DateTimeInterval extends AbstractInterval<LocalDateTime, Date
             }
         }
         throw new DateTimeParseException("Interval cannot be parsed, no forward slash found", text, 0);
+    }
+    
+    public static DateTimeInterval wholeDay(final LocalDate date) {
+        Objects.requireNonNull(date, "date");
+        final LocalDateTime start = date.atStartOfDay();
+        return new DateTimeInterval(start, start.plusDays(1L));
     }
 
     public static DateTimeInterval of(final Interval<LocalDateTime> interval) {
