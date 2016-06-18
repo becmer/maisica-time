@@ -1,4 +1,4 @@
-package pl.maisica.time;
+package net.maisica.time.interval;
 
 import java.time.Duration;
 import java.time.temporal.Temporal;

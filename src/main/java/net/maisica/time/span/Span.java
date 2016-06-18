@@ -1,4 +1,4 @@
-package pl.maisica.time;
+package net.maisica.time.span;
 
 public interface Span<T extends Comparable<? super T>, U extends Comparable<? super U>> {
     

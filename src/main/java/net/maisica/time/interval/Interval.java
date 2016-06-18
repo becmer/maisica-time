@@ -1,4 +1,4 @@
-package pl.maisica.time;
+package net.maisica.time.interval;
 
 public interface Interval<T extends Comparable<? super T>> {
     

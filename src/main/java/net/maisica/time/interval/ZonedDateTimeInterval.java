@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package pl.maisica.time;
+package net.maisica.time.interval;
 
 import java.io.Serializable;
-import java.time.LocalDate;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeParseException;
 import java.util.Objects;
 
@@ -24,44 +24,44 @@ import java.util.Objects;
  *
  * @author Kamil Becmer <kamil.becmer at maisica.pl>
  */
-public final class LocalDateInterval extends AbstractInterval<LocalDate, LocalDateInterval> implements TemporalInterval<LocalDate>, Serializable {
+public final class ZonedDateTimeInterval extends AbstractInterval<ZonedDateTime, ZonedDateTimeInterval> implements TemporalInterval<ZonedDateTime>, Serializable {
     
-    public static LocalDateInterval parse(final CharSequence text) {
+    public static ZonedDateTimeInterval parse(final CharSequence text) {
         Objects.requireNonNull(text, "text");
         for (int i = 0; i < text.length(); i++) {
             if (text.charAt(i) == '/') {
-                final LocalDate start = LocalDate.parse(text.subSequence(0, i++).toString());
-                final LocalDate end = LocalDate.parse(text.subSequence(i, text.length()).toString());
+                final ZonedDateTime start = ZonedDateTime.parse(text.subSequence(0, i++).toString());
+                final ZonedDateTime end = ZonedDateTime.parse(text.subSequence(i, text.length()).toString());
                 return between(start, end);
             }
         }
         throw new DateTimeParseException("Interval cannot be parsed, no forward slash found", text, 0);
     }
 
-    public static LocalDateInterval between(final LocalDate start, final LocalDate end) {
+    public static ZonedDateTimeInterval between(final ZonedDateTime start, final ZonedDateTime end) {
         Objects.requireNonNull(start, "start");
         Objects.requireNonNull(end, "end");
         if (end.compareTo(start) < 0) {
             throw new IllegalArgumentException("end is before start");
         }
-        return new LocalDateInterval(start, end);
+        return new ZonedDateTimeInterval(start, end);
     }
     
-    public static LocalDateInterval of(final Interval<LocalDate> interval) {
+    public static ZonedDateTimeInterval of(final Interval<ZonedDateTime> interval) {
         Objects.requireNonNull(interval, "interval");
-        if (interval instanceof LocalDateInterval) {
-            return (LocalDateInterval) interval;
+        if (interval instanceof ZonedDateTimeInterval) {
+            return (ZonedDateTimeInterval) interval;
         }
         return between(interval.getStart(), interval.getEnd());
     }
 
-    private LocalDateInterval(final LocalDate start, final LocalDate end) {
+    private ZonedDateTimeInterval(final ZonedDateTime start, final ZonedDateTime end) {
         super(start, end);
     }
 
     @Override
-    protected IntervalFactory<LocalDate, LocalDateInterval> getFactory() {
-        return LocalDateInterval::new;
+    protected IntervalFactory<ZonedDateTime, ZonedDateTimeInterval> getFactory() {
+        return ZonedDateTimeInterval::new;
     }
 
 }

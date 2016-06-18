@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package pl.maisica.time;
+package net.maisica.time.interval;
 
 import java.io.Serializable;
-import java.time.OffsetDateTime;
+import java.time.MonthDay;
 import java.time.format.DateTimeParseException;
 import java.util.Objects;
 
@@ -24,44 +24,44 @@ import java.util.Objects;
  *
  * @author Kamil Becmer <kamil.becmer at maisica.pl>
  */
-public final class OffsetDateTimeInterval extends AbstractInterval<OffsetDateTime, OffsetDateTimeInterval> implements TemporalInterval<OffsetDateTime>, Serializable {
+public final class MonthDayInterval extends AbstractInterval<MonthDay, MonthDayInterval> implements Serializable {
 
-    public static OffsetDateTimeInterval parse(final CharSequence text) {
+    public static MonthDayInterval parse(final CharSequence text) {
         Objects.requireNonNull(text, "text");
         for (int i = 0; i < text.length(); i++) {
             if (text.charAt(i) == '/') {
-                final OffsetDateTime start = OffsetDateTime.parse(text.subSequence(0, i++).toString());
-                final OffsetDateTime end = OffsetDateTime.parse(text.subSequence(i, text.length()).toString());
+                final MonthDay start = MonthDay.parse(text.subSequence(0, i++).toString());
+                final MonthDay end = MonthDay.parse(text.subSequence(i, text.length()).toString());
                 return between(start, end);
             }
         }
         throw new DateTimeParseException("Interval cannot be parsed, no forward slash found", text, 0);
     }
 
-    public static OffsetDateTimeInterval between(final OffsetDateTime start, final OffsetDateTime end) {
+    public static MonthDayInterval between(final MonthDay start, final MonthDay end) {
         Objects.requireNonNull(start, "start");
         Objects.requireNonNull(end, "end");
         if (end.compareTo(start) < 0) {
             throw new IllegalArgumentException("end is before start");
         }
-        return new OffsetDateTimeInterval(start, end);
+        return new MonthDayInterval(start, end);
     }
 
-    public static OffsetDateTimeInterval of(final Interval<OffsetDateTime> interval) {
+    public static MonthDayInterval of(final Interval<MonthDay> interval) {
         Objects.requireNonNull(interval, "interval");
-        if (interval instanceof OffsetDateTimeInterval) {
-            return (OffsetDateTimeInterval) interval;
+        if (interval instanceof MonthDayInterval) {
+            return (MonthDayInterval) interval;
         }
         return between(interval.getStart(), interval.getEnd());
     }
 
-    private OffsetDateTimeInterval(final OffsetDateTime start, final OffsetDateTime end) {
+    private MonthDayInterval(final MonthDay start, final MonthDay end) {
         super(start, end);
     }
 
     @Override
-    protected IntervalFactory<OffsetDateTime, OffsetDateTimeInterval> getFactory() {
-        return OffsetDateTimeInterval::new;
+    protected IntervalFactory<MonthDay, MonthDayInterval> getFactory() {
+        return MonthDayInterval::new;
     }
 
 }

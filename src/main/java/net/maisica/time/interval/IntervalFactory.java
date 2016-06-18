@@ -1,4 +1,4 @@
-package pl.maisica.time;
+package net.maisica.time.interval;
 
 @FunctionalInterface
 public interface IntervalFactory<T extends Comparable<? super T>, U extends Interval<T>> {

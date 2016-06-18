@@ -13,8 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package pl.maisica.time;
+package net.maisica.time.interval;
 
+import net.maisica.time.interval.AbstractInterval;
+import net.maisica.time.interval.IntervalFactory;
 import static org.junit.Assert.*;
 import org.junit.Test;
 

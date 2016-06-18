@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package pl.maisica.time;
+package net.maisica.time.interval;
 
 import java.io.Serializable;
-import java.time.Instant;
+import java.time.YearMonth;
 import java.time.format.DateTimeParseException;
 import java.util.Objects;
 
@@ -24,44 +24,44 @@ import java.util.Objects;
  *
  * @author Kamil Becmer <kamil.becmer at maisica.pl>
  */
-public final class InstantInterval extends AbstractInterval<Instant, InstantInterval> implements TemporalInterval<Instant>, Serializable {
+public final class YearMonthInterval extends AbstractInterval<YearMonth, YearMonthInterval> implements TemporalInterval<YearMonth>, Serializable {
     
-    public static InstantInterval parse(final CharSequence text) {
+    public static YearMonthInterval parse(final CharSequence text) {
         Objects.requireNonNull(text, "text");
         for (int i = 0; i < text.length(); i++) {
             if (text.charAt(i) == '/') {
-                final Instant start = Instant.parse(text.subSequence(0, i++).toString());
-                final Instant end = Instant.parse(text.subSequence(i, text.length()).toString());
+                final YearMonth start = YearMonth.parse(text.subSequence(0, i++).toString());
+                final YearMonth end = YearMonth.parse(text.subSequence(i, text.length()).toString());
                 return between(start, end);
             }
         }
         throw new DateTimeParseException("Interval cannot be parsed, no forward slash found", text, 0);
     }
     
-    public static InstantInterval between(final Instant start, final Instant end) {
+    public static YearMonthInterval between(final YearMonth start, final YearMonth end) {
         Objects.requireNonNull(start, "start");
         Objects.requireNonNull(end, "end");
         if (end.compareTo(start) < 0) {
             throw new IllegalArgumentException("end is before start");
         }
-        return new InstantInterval(start, end);
+        return new YearMonthInterval(start, end);
     }
     
-    public static InstantInterval of(final Interval<Instant> interval) {
+    public static YearMonthInterval of(final Interval<YearMonth> interval) {
         Objects.requireNonNull(interval, "interval");
-        if (interval instanceof InstantInterval) {
-            return (InstantInterval) interval;
+        if (interval instanceof YearMonthInterval) {
+            return (YearMonthInterval) interval;
         }
         return between(interval.getStart(), interval.getEnd());
     }
 
-    private InstantInterval(final Instant start, final Instant end) {
+    private YearMonthInterval(final YearMonth start, final YearMonth end) {
         super(start, end);
     }
 
     @Override
-    protected IntervalFactory<Instant, InstantInterval> getFactory() {
-        return InstantInterval::new;
+    protected IntervalFactory<YearMonth, YearMonthInterval> getFactory() {
+        return YearMonthInterval::new;
     }
     
 }

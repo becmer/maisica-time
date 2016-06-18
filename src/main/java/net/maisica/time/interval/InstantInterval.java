@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package pl.maisica.time;
+package net.maisica.time.interval;
 
 import java.io.Serializable;
-import java.time.ZonedDateTime;
+import java.time.Instant;
 import java.time.format.DateTimeParseException;
 import java.util.Objects;
 
@@ -24,44 +24,44 @@ import java.util.Objects;
  *
  * @author Kamil Becmer <kamil.becmer at maisica.pl>
  */
-public final class ZonedDateTimeInterval extends AbstractInterval<ZonedDateTime, ZonedDateTimeInterval> implements TemporalInterval<ZonedDateTime>, Serializable {
+public final class InstantInterval extends AbstractInterval<Instant, InstantInterval> implements TemporalInterval<Instant>, Serializable {
     
-    public static ZonedDateTimeInterval parse(final CharSequence text) {
+    public static InstantInterval parse(final CharSequence text) {
         Objects.requireNonNull(text, "text");
         for (int i = 0; i < text.length(); i++) {
             if (text.charAt(i) == '/') {
-                final ZonedDateTime start = ZonedDateTime.parse(text.subSequence(0, i++).toString());
-                final ZonedDateTime end = ZonedDateTime.parse(text.subSequence(i, text.length()).toString());
+                final Instant start = Instant.parse(text.subSequence(0, i++).toString());
+                final Instant end = Instant.parse(text.subSequence(i, text.length()).toString());
                 return between(start, end);
             }
         }
         throw new DateTimeParseException("Interval cannot be parsed, no forward slash found", text, 0);
     }
-
-    public static ZonedDateTimeInterval between(final ZonedDateTime start, final ZonedDateTime end) {
+    
+    public static InstantInterval between(final Instant start, final Instant end) {
         Objects.requireNonNull(start, "start");
         Objects.requireNonNull(end, "end");
         if (end.compareTo(start) < 0) {
             throw new IllegalArgumentException("end is before start");
         }
-        return new ZonedDateTimeInterval(start, end);
+        return new InstantInterval(start, end);
     }
     
-    public static ZonedDateTimeInterval of(final Interval<ZonedDateTime> interval) {
+    public static InstantInterval of(final Interval<Instant> interval) {
         Objects.requireNonNull(interval, "interval");
-        if (interval instanceof ZonedDateTimeInterval) {
-            return (ZonedDateTimeInterval) interval;
+        if (interval instanceof InstantInterval) {
+            return (InstantInterval) interval;
         }
         return between(interval.getStart(), interval.getEnd());
     }
 
-    private ZonedDateTimeInterval(final ZonedDateTime start, final ZonedDateTime end) {
+    private InstantInterval(final Instant start, final Instant end) {
         super(start, end);
     }
 
     @Override
-    protected IntervalFactory<ZonedDateTime, ZonedDateTimeInterval> getFactory() {
-        return ZonedDateTimeInterval::new;
+    protected IntervalFactory<Instant, InstantInterval> getFactory() {
+        return InstantInterval::new;
     }
-
+    
 }

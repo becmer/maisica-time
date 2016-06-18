@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package pl.maisica.time;
+package net.maisica.time.interval;
 
 import java.io.Serializable;
-import java.time.OffsetTime;
+import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.Objects;
 
@@ -24,44 +24,44 @@ import java.util.Objects;
  *
  * @author Kamil Becmer <kamil.becmer at maisica.pl>
  */
-public final class OffsetTimeInterval extends AbstractInterval<OffsetTime, OffsetTimeInterval> implements TemporalInterval<OffsetTime>, Serializable {
-
-    public static OffsetTimeInterval parse(final CharSequence text) {
+public final class LocalDateInterval extends AbstractInterval<LocalDate, LocalDateInterval> implements TemporalInterval<LocalDate>, Serializable {
+    
+    public static LocalDateInterval parse(final CharSequence text) {
         Objects.requireNonNull(text, "text");
         for (int i = 0; i < text.length(); i++) {
             if (text.charAt(i) == '/') {
-                final OffsetTime start = OffsetTime.parse(text.subSequence(0, i++).toString());
-                final OffsetTime end = OffsetTime.parse(text.subSequence(i, text.length()).toString());
+                final LocalDate start = LocalDate.parse(text.subSequence(0, i++).toString());
+                final LocalDate end = LocalDate.parse(text.subSequence(i, text.length()).toString());
                 return between(start, end);
             }
         }
         throw new DateTimeParseException("Interval cannot be parsed, no forward slash found", text, 0);
     }
-    
-    public static OffsetTimeInterval between(final OffsetTime start, final OffsetTime end) {
+
+    public static LocalDateInterval between(final LocalDate start, final LocalDate end) {
         Objects.requireNonNull(start, "start");
         Objects.requireNonNull(end, "end");
         if (end.compareTo(start) < 0) {
             throw new IllegalArgumentException("end is before start");
         }
-        return new OffsetTimeInterval(start, end);
+        return new LocalDateInterval(start, end);
     }
     
-    public static OffsetTimeInterval of(final Interval<OffsetTime> interval) {
+    public static LocalDateInterval of(final Interval<LocalDate> interval) {
         Objects.requireNonNull(interval, "interval");
-        if (interval instanceof OffsetTimeInterval) {
-            return (OffsetTimeInterval) interval;
+        if (interval instanceof LocalDateInterval) {
+            return (LocalDateInterval) interval;
         }
         return between(interval.getStart(), interval.getEnd());
     }
 
-    private OffsetTimeInterval(final OffsetTime start, final OffsetTime end) {
+    private LocalDateInterval(final LocalDate start, final LocalDate end) {
         super(start, end);
     }
 
     @Override
-    protected IntervalFactory<OffsetTime, OffsetTimeInterval> getFactory() {
-        return OffsetTimeInterval::new;
+    protected IntervalFactory<LocalDate, LocalDateInterval> getFactory() {
+        return LocalDateInterval::new;
     }
 
 }

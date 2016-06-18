@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package pl.maisica.time;
+package net.maisica.time.interval;
 
 import java.io.Serializable;
-import java.time.Year;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeParseException;
 import java.util.Objects;
 
@@ -24,44 +24,44 @@ import java.util.Objects;
  *
  * @author Kamil Becmer <kamil.becmer at maisica.pl>
  */
-public final class YearInterval extends AbstractInterval<Year, YearInterval> implements TemporalInterval<Year>, Serializable {
-
-    public static YearInterval parse(final CharSequence text) {
+public final class ZoneOffsetInterval extends AbstractInterval<ZoneOffset, ZoneOffsetInterval> implements Serializable {
+    
+    public static ZoneOffsetInterval parse(final CharSequence text) {
         Objects.requireNonNull(text, "text");
         for (int i = 0; i < text.length(); i++) {
             if (text.charAt(i) == '/') {
-                final Year start = Year.parse(text.subSequence(0, i++).toString());
-                final Year end = Year.parse(text.subSequence(i, text.length()).toString());
+                final ZoneOffset start = ZoneOffset.of(text.subSequence(0, i++).toString());
+                final ZoneOffset end = ZoneOffset.of(text.subSequence(i, text.length()).toString());
                 return between(start, end);
             }
         }
         throw new DateTimeParseException("Interval cannot be parsed, no forward slash found", text, 0);
     }
-
-    public static YearInterval between(final Year start, final Year end) {
+    
+    public static ZoneOffsetInterval between(final ZoneOffset start, final ZoneOffset end) {
         Objects.requireNonNull(start, "start");
         Objects.requireNonNull(end, "end");
         if (end.compareTo(start) < 0) {
             throw new IllegalArgumentException("end is before start");
         }
-        return new YearInterval(start, end);
+        return new ZoneOffsetInterval(start, end);
     }
-
-    public static YearInterval of(final Interval<Year> interval) {
+    
+    public static ZoneOffsetInterval of(final Interval<ZoneOffset> interval) {
         Objects.requireNonNull(interval, "interval");
-        if (interval instanceof YearInterval) {
-            return (YearInterval) interval;
+        if (interval instanceof ZoneOffsetInterval) {
+            return (ZoneOffsetInterval) interval;
         }
         return between(interval.getStart(), interval.getEnd());
     }
 
-    private YearInterval(final Year start, final Year end) {
+    private ZoneOffsetInterval(final ZoneOffset start, final ZoneOffset end) {
         super(start, end);
     }
 
     @Override
-    protected IntervalFactory<Year, YearInterval> getFactory() {
-        return YearInterval::new;
+    protected IntervalFactory<ZoneOffset, ZoneOffsetInterval> getFactory() {
+        return ZoneOffsetInterval::new;
     }
-
+    
 }
